@@ -1,0 +1,6 @@
+from typing import Protocol
+import numpy as np
+
+class ModulationStrategy(Protocol):
+    def modulate(self, bits: np.ndarray) -> np.ndarray: ...
+    def demodulate(self, symbols: np.ndarray) -> np.ndarray: ...

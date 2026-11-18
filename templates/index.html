@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Symulator Telekomunikacyjny</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&family=Sora:wght@600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+<main class="app">
+
+    <header>
+        <h1>Symulator transmisji</h1>
+        <p class="subtitle">Zbuduj tor: źródło → modulacja → kanał z zakłóceniami → odbiornik.</p>
+    </header>
+
+    <nav class="stepper" aria-label="Postęp kreatora">
+        <div class="stepper-item active" data-step="1"><div class="stepper-dot">1</div><span class="label">Źródło</span></div>
+        <div class="stepper-bar"><i></i></div>
+        <div class="stepper-item" data-step="2"><div class="stepper-dot">2</div><span class="label">Kanał</span></div>
+        <div class="stepper-bar"><i></i></div>
+        <div class="stepper-item" data-step="3"><div class="stepper-dot">3</div><span class="label">Symulacja</span></div>
+    </nav>
+
+    <!-- KROK 1: ŹRÓDŁO -->
+    <section id="step-1" class="step active">
+        <h3>Skąd pochodzą dane?</h3>
+
+        <div class="field-group">
+            <div class="segmented" role="radiogroup" aria-label="Typ źródła">
+                <input type="radio" name="source-type" id="src-random" value="random" checked>
+                <label for="src-random">Losowe bity</label>
+                <input type="radio" name="source-type" id="src-text" value="text">
+                <label for="src-text">Tekst</label>
+            </div>
+        </div>
+
+        <div id="source-random-wrapper">
+            <div class="field-group">
+                <label class="field" for="source-bits">Liczba bitów</label>
+                <input type="number" id="source-bits" value="100000" min="1" step="1" required>
+            </div>
+            <div class="field-group">
+                <label class="field" for="source-seed">Seed danych wejściowych (puste = losowy)</label>
+                <input type="number" id="source-seed" step="1" min="0" placeholder="np. 1234">
+            </div>
+        </div>
+
+        <div id="source-text-wrapper" class="field-group" hidden>
+            <label class="field" for="source-text">Tekst do wysłania</label>
+            <textarea id="source-text" rows="4" required placeholder="Wklej tekst, który ma przejść przez kanał"></textarea>
+        </div>
+
+        <div class="actions end">
+            <button class="btn" data-action="to-channel">Dalej: kanał</button>
+        </div>
+    </section>
+
+    <!-- KROK 2: MODULACJA I KANAŁ -->
+    <section id="step-2" class="step">
+        <h3>Modulacja i kanał</h3>
+
+        <div class="field-group">
+            <label class="field" for="modulation-type">Rodzaj modulacji</label>
+            <select id="modulation-type"><option disabled>Ładowanie...</option></select>
+        </div>
+
+        <div class="channel-head"><h4>Zakłócenia w kanale</h4></div>
+        <p class="hint">Włącz szumy i ustaw ich kolejność: sygnał przechodzi przez nie od góry do dołu. Przeciągnij kartę za uchwyt lub użyj strzałek.</p>
+
+        <div class="chain">
+            <div class="chain-end">Nadajnik <small>sygnał po modulacji</small></div>
+            <div id="noise-container"><p class="hint">Ładowanie dostępnych szumów...</p></div>
+            <div class="chain-end">Odbiornik <small>demodulacja</small></div>
+        </div>
+
+        <div class="actions">
+            <button class="btn ghost" data-goto="1">Wstecz</button>
+            <button class="btn" data-action="to-summary">Dalej: podsumowanie</button>
+        </div>
+    </section>
+
+    <!-- KROK 3: PODSUMOWANIE I WYNIKI -->
+    <section id="step-3" class="step">
+        <h3>Sprawdź tor i uruchom</h3>
+        <div id="summary-content" class="summary-block"></div>
+
+        <div class="actions">
+            <button class="btn ghost" data-goto="2">Wstecz</button>
+            <button class="btn" id="run-btn" data-action="run">Uruchom symulację</button>
+        </div>
+
+        <div id="results" class="summary-block" hidden></div>
+    </section>
+
+</main>
+
+<script type="module" src="/static/js/main.js"></script>
+</body>
+</html>
